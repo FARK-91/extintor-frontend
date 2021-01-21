@@ -52,7 +52,7 @@ const Login=()=>{
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     };
-    const responseUser = await fetch('http://34.228.185.104:3001/users');
+    const responseUser = await fetch('https://back.prolightpty.com/users');
     const userData = await responseUser.json();
     if (userData.length != 0){
       userData.forEach((item) => {

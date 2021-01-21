@@ -60,7 +60,7 @@ const prueba = (nextDate) => {
 const fetchData = async () => {
 
     try {
-        const data = await fetch('http://34.228.185.104:3001/customers')
+        const data = await fetch('https://back.prolightpty.com/customers')
         const customerData = await data.json()
         let rowsData = {}
         const localArr = []
