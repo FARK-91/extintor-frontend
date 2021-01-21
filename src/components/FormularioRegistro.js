@@ -130,7 +130,7 @@ const useStyles = makeStyles((theme1) => ({
       let historyData = {}
       const historyArr = []
       let customerID = ''
-      const responseUser = await fetch(`https://extintores.prolight.com/customers`);
+      const responseUser = await fetch(`http://34.228.185.104:3001/customers`);
       const customerData = await responseUser.json();
       if (customerData.length != 0){
         customerData.forEach((item) => {
@@ -194,7 +194,7 @@ const useStyles = makeStyles((theme1) => ({
           ],
         })
       };
-      const response = await fetch('https://extintores.prolight.com/customers',requestOptions);
+      const response = await fetch('http://34.228.185.104:3001/customers',requestOptions);
       const data = await response.json();
       // this.setState({ postId: data.id });
     }
@@ -228,7 +228,7 @@ const useStyles = makeStyles((theme1) => ({
           exting: localArr
         })
       };
-      const response = await fetch('https://extintores.prolight.com/customers/id',updateOptions);
+      const response = await fetch('http://34.228.185.104:3001/customers/id',updateOptions);
       const data = await response.json();
       // this.setState({ postId: data.id });
     }

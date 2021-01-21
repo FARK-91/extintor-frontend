@@ -55,7 +55,7 @@ fetchData()
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     };
-    const responseUser = await fetch('https://extintores.prolight.com/users');
+    const responseUser = await fetch('http://34.228.185.104:3001/users');
     const userData = await responseUser.json();
     if (userData.length != 0){
       userData.forEach((item) => {
@@ -78,7 +78,7 @@ const createUser = async () => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: name, login: correo, password: password })
   };
-  const response = await fetch('https://extintores.prolight.com/users',requestOptions);
+  const response = await fetch('http://34.228.185.104:3001/users',requestOptions);
   const data = await response.json();
   // this.setState({ postId: data.id });
 }

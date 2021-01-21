@@ -20,7 +20,7 @@ const Inicio = (props) => {
 
     const fetchData = async () => {
         try {
-            const data = await fetch('https://extintores.prolight.com/customers')
+            const data = await fetch('http://34.228.185.104:3001/customers')
             const customerData = await data.json()
             let rowsData = {}
             const localArr = []
