@@ -333,7 +333,7 @@ const useStyles = makeStyles((theme1) => ({
                                            id="date" onChange={ e => setfechaU(e.target.value) }
                                            label="Fecha Ultima Recarga"
                                            type="date"
-                                          //  className={classes.textField}
+                                           className={classes.textField}
                                            InputLabelProps={{
                                              shrink: true,
 
@@ -345,7 +345,7 @@ const useStyles = makeStyles((theme1) => ({
                                            id="date" onChange={ e => setfechaS(e.target.value) }
                                            label="Fecha Siguiente Recarga"
                                            type="date"
-                                          //  className={classes.textField}
+                                           className={classes.textField}
                                            InputLabelProps={{
                                           shrink: true,
                                            }}
