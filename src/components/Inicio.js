@@ -133,7 +133,7 @@ const fetchData = async () => {
                   <TableCell align="center">{row.lastDate}</TableCell>
                   <TableCell align="center">{row.nextDate}</TableCell>
                   <TableCell align="center">
-                    <Link to="/extintor">
+                    <Link to="#">
                       <button className="btn btn-success btn-sm float-right mr-2">
                         Recargar
                       </button>
