@@ -138,7 +138,7 @@ const useStyles = makeStyles((theme1) => ({
       let historyData = {}
       const historyArr = []
       let customerID = ''
-      const responseUser = await fetch(`https://back.prolightpty.com//customers`);
+      const responseUser = await fetch(`https://back.prolightpty.com/customers`);
       const customerData = await responseUser.json();
       if (customerData.length != 0){
         customerData.forEach((item) => {
@@ -213,7 +213,7 @@ const useStyles = makeStyles((theme1) => ({
           ],
         })
       };
-      const response = await fetch('https://back.prolightpty.com//customers',requestOptions);
+      const response = await fetch('https://back.prolightpty.com/customers',requestOptions);
       const data = await response.json();
       updateExting(data.id, historyArr)
     }
@@ -238,7 +238,7 @@ const useStyles = makeStyles((theme1) => ({
       };
 
       //Customer Update
-      const response = await fetch(`https://back.prolightpty.com//customers/${id}`,updateOptions);
+      const response = await fetch(`https://back.prolightpty.com/customers/${id}`,updateOptions);
       const data = await response.json();
       updateExting(data.id, historyArr)
     }
@@ -261,7 +261,7 @@ const useStyles = makeStyles((theme1) => ({
         })
       };
 
-      const responseCust = await fetch(`https://back.prolightpty.com//customers/${custId}`);
+      const responseCust = await fetch(`https://back.prolightpty.com/customers/${custId}`);
       const oneCust = await responseCust.json();
       oneCust.exting.forEach((item) => {
         if(item.serial === serial){
@@ -269,7 +269,7 @@ const useStyles = makeStyles((theme1) => ({
         }
       })
       if(flag !== ''){
-        const putExting = await fetch(`https://back.prolightpty.com//extings/${flag}`,extingBody);
+        const putExting = await fetch(`https://back.prolightpty.com/extings/${flag}`,extingBody);
         const extingData = await putExting.json();
       }
     } 
