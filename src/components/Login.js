@@ -11,8 +11,16 @@ import {
   Link
 } from "react-router-dom";
 
+const storage = localStorage.getItem("usuario")
+
 
 const Login=()=>{
+
+  React.useEffect(() => {
+    if(storage !== null){
+      localStorage.removeItem("usuario")
+    }
+  }, [])
 
   const [correo, setCorreo] = React.useState('')
   const [password, setPassword] = React.useState('')
@@ -52,7 +60,7 @@ const Login=()=>{
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     };
-    const responseUser = await fetch('https://back.prolightpty.com/users');
+    const responseUser = await fetch('https://back.prolightpty.com//users');
     const userData = await responseUser.json();
     if (userData.length != 0){
       userData.forEach((item) => {
@@ -60,7 +68,7 @@ const Login=()=>{
           count += 1
           if (item.password === password){
             count2 += 1
-            console.log(item)
+            localStorage.setItem("usuario", item.name)
             window.location.href = "./dashboard"
           }
         }

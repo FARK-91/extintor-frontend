@@ -24,12 +24,15 @@ import {
       minWidth: 650,
     },
     mainTitle: {
-      marginBottom: 20, 
+      marginBottom: 20,
+      textAlign: 'center'
     },
     inconSize: {
-      fontSize: 16, 
+      fontSize: 18,
+      textAlign: 'center'
     }
   });
+  const storage = localStorage.getItem("usuario")
 
   // function createData(customer, brand, model, lastDate, nextDate) {
   //   return { customer, brand, model, lastDate, nextDate };
@@ -48,8 +51,12 @@ const Inicio = () => {
   const [rows, setCustomer] = React.useState([])
 
   React.useEffect(() => {
-    fetchData()
-}, [])
+    if(storage !== null){
+      fetchData()
+    }else{
+      window.location.href = "./"
+    }
+  }, [])
 
 const prueba = (nextDate) => {
   let msDiff = new Date(nextDate).getTime() - new Date().getTime();    //Future date - current date
@@ -60,7 +67,7 @@ const prueba = (nextDate) => {
 const fetchData = async () => {
 
     try {
-        const data = await fetch('https://back.prolightpty.com/customers')
+        const data = await fetch('https://back.prolightpty.com//customers')
         const customerData = await data.json()
         let rowsData = {}
         const localArr = []
@@ -84,60 +91,68 @@ const fetchData = async () => {
     }
 }
 
-  return (
-    <Fragment>
-      <TableContainer component={Paper}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={4} lg={6}>
-            <Typography className={classes.mainTitle} variant="h4">Extintores</Typography>
+  if(storage !== null){
+    return (
+      <Fragment>
+        <TableContainer component={Paper}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6} lg={6}>
+              <Typography className={classes.mainTitle} variant="h4">Extintores</Typography>
+            </Grid>
+            <Grid item xs={12} md={6} lg={6} className={classes.inconSize}>
+              <ErrorRoundedIcon style={{ color: orange.A200, fontSize: 20 }}/> Alerta recargar pronto <br/>
+              <WarningRoundedIcon style={{ color: red[600], fontSize: 20 }}/> Fecha de recarga vencida
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={4} lg={6} className="inconSize">
-            <ErrorRoundedIcon style={{ color: orange.A200, fontSize: 20 }}/> Alerta recargar pronto <br/>
-            <WarningRoundedIcon style={{ color: red[600], fontSize: 20 }}/> Fecha de recarga vencida
-          </Grid>
-        </Grid>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Propietario</TableCell>
-              <TableCell align="center">Marca</TableCell>
-              <TableCell align="center">Modelo</TableCell>
-              <TableCell align="center">Última Recarga</TableCell>
-              <TableCell align="center">Próxima Recarga</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.customer}&nbsp;
-                  {
-                  row.warningIcon > '0' && row.warningIcon <= '3' ? <ErrorRoundedIcon style={{ color: orange.A200 }}/>
-                   : ''
-                  }
-                  {
-                  row.warningIcon < '0' ? <WarningRoundedIcon style={{ color: red[600] }}/>
-                   : ''
-                  }
-                </TableCell>
-                <TableCell align="center">{row.brand}</TableCell>
-                <TableCell align="center">{row.model}</TableCell>
-                <TableCell align="center">{row.lastDate}</TableCell>
-                <TableCell align="center">{row.nextDate}</TableCell>
-                <TableCell align="center">
-                  <Link to="/users">
-                    <button className="btn btn-success btn-sm float-right mr-2">
-                      Recargar
-                    </button>
-                  </Link>
-                </TableCell>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Propietario</TableCell>
+                <TableCell align="center">Marca</TableCell>
+                <TableCell align="center">Modelo</TableCell>
+                <TableCell align="center">Última Recarga</TableCell>
+                <TableCell align="center">Próxima Recarga</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Fragment>
-  );
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.name}>
+                  <TableCell component="th" scope="row">
+                    {row.customer}&nbsp;
+                    {
+                    row.warningIcon > '0' && row.warningIcon <= '3' ? <ErrorRoundedIcon style={{ color: orange.A200 }}/>
+                     : ''
+                    }
+                    {
+                    row.warningIcon < '0' ? <WarningRoundedIcon style={{ color: red[600] }}/>
+                     : ''
+                    }
+                  </TableCell>
+                  <TableCell align="center">{row.brand}</TableCell>
+                  <TableCell align="center">{row.model}</TableCell>
+                  <TableCell align="center">{row.lastDate}</TableCell>
+                  <TableCell align="center">{row.nextDate}</TableCell>
+                  <TableCell align="center">
+                    <Link to="/extintor">
+                      <button className="btn btn-success btn-sm float-right mr-2">
+                        Recargar
+                      </button>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Fragment>
+    );
+  }else{
+    return (
+      <Fragment>
+        
+      </Fragment>
+    );
+  }
 }
 
 export default Inicio;

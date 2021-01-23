@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Grid,Paper,Avatar,TextField} from '@material-ui/core';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import { MakeStyles } from '@material-ui/core/styles';
@@ -12,8 +12,16 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from "@material-ui/core";
 
+const storage = localStorage.getItem("usuario")
+
 const FormularioRegistro = () => {
 
+  React.useEffect(() => {
+    if(storage !== null){
+    }else{
+      window.location.href = "./"
+    }
+  }, [])
 
 const paperStyle={padding :20,height:'80vh',width:900,margin:'20px auto'}
 const avatarStyle={backgroundColor:'#325ed8'}
@@ -130,7 +138,7 @@ const useStyles = makeStyles((theme1) => ({
       let historyData = {}
       const historyArr = []
       let customerID = ''
-      const responseUser = await fetch(`https://back.prolightpty.com/customers`);
+      const responseUser = await fetch(`https://back.prolightpty.com//customers`);
       const customerData = await responseUser.json();
       if (customerData.length != 0){
         customerData.forEach((item) => {
@@ -139,13 +147,15 @@ const useStyles = makeStyles((theme1) => ({
             customerID = item.id
             rowsData = item.exting.map(item2 => {
               historyData = item2.history.map(item3 => {
-                historyArr.push({
-                  id: item3.id,
-                  extinguisher: item3.extinguisher,
-                  customer: item3.customer,
-                  user: item3.user,
-                  last_recharge: item3.last_recharge
-                })
+                if(item3.serial === serial){
+                  historyArr.push({
+                    id: item3.id,
+                    extinguisher: item3.extinguisher,
+                    customer: item3.customer,
+                    user: item3.user,
+                    last_recharge: item3.last_recharge
+                  })
+                }
               })
               localArr.push({
                   id: item2.id,
@@ -154,19 +164,28 @@ const useStyles = makeStyles((theme1) => ({
                   model: item2.model,
                   last_recharge: item2.last_recharge,
                   next_recharge: item2.next_recharge,
-                  history: historyArr
+                  // history: historyArr
               })
             })
           }
         })
       }
       if (count === 0){
-        createData()
+        createData(historyArr)
+        setTimeout(() => {
+        console.log('Insertando datos...')
+        }, 3000);
         window.location.href = "./dashboard"
-      }else{updateData(localArr,historyArr,customerID)}
+      }else{
+        updateData(localArr,historyArr,customerID)
+        setTimeout(() => {
+          console.log('Insertando datos...')
+        }, 3000);
+        window.location.href = "./dashboard"
+      }
     }
 
-    const createData = async () => {
+    const createData = async (historyArr) => {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -181,58 +200,81 @@ const useStyles = makeStyles((theme1) => ({
               brand: marca,
               model: modelo,
               last_recharge: fechaU,
-              // next_recharge: fechaU,
-              history: [
-                {
-                  extinguisher: serial,
-                  customer: nombre,
-                  // user: item3.user,
-                  // last_recharge: item3.last_recharge
-                }
-              ]
+              next_recharge: fechaS,
+              // history: [
+              //   {
+              //     extinguisher: serial,
+              //     customer: nombre,
+              //     user: storage,
+              //     last_recharge: fechaU
+              //   }
+              // ]
             }
           ],
         })
       };
-      const response = await fetch('https://back.prolightpty.com/customers',requestOptions);
+      const response = await fetch('https://back.prolightpty.com//customers',requestOptions);
       const data = await response.json();
-      // this.setState({ postId: data.id });
+      updateExting(data.id, historyArr)
     }
 
     const updateData = async (localArr,historyArr,id) => {
-      console.log(localArr, 'localArr')
-      console.log(historyArr, 'historyArr')
-      console.log(id, 'id')
-      historyArr.push({
-        extinguisher: serial,
-        customer: nombre,
-        // user: item3.user,
-        // last_recharge: item3.last_recharge
-      })
       localArr.push({
         serial: serial,
         brand: marca,
         model: modelo,
         last_recharge: fechaU,
-        // next_recharge: item2.next_recharge,
-        history: historyArr
+        next_recharge: fechaS,
+        // history: historyArr
       })
       const updateOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          name: nombre, 
           address: direccion, 
           phone: telefono,
-          doc: cedula,
           exting: localArr
         })
       };
-      const response = await fetch('https://back.prolightpty.com/customers/id',updateOptions);
+
+      //Customer Update
+      const response = await fetch(`https://back.prolightpty.com//customers/${id}`,updateOptions);
       const data = await response.json();
-      // this.setState({ postId: data.id });
+      updateExting(data.id, historyArr)
     }
 
+    // Exting Update
+    const updateExting = async (custId, historyArr) => {
+      let flag = ''
+      historyArr.push({
+        extinguisher: serial,
+        customer: nombre,
+        user: storage,
+        last_recharge: fechaS
+      })
+
+      const extingBody = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          history: historyArr
+        })
+      };
+
+      const responseCust = await fetch(`https://back.prolightpty.com//customers/${custId}`);
+      const oneCust = await responseCust.json();
+      oneCust.exting.forEach((item) => {
+        if(item.serial === serial){
+          flag = item.id
+        }
+      })
+      if(flag !== ''){
+        const putExting = await fetch(`https://back.prolightpty.com//extings/${flag}`,extingBody);
+        const extingData = await putExting.json();
+      }
+    } 
+
+  if(storage !== null){
     return (
         <div>
             <h2 align='center'>Formulario De Registro</h2>
@@ -291,7 +333,7 @@ const useStyles = makeStyles((theme1) => ({
                                            id="date" onChange={ e => setfechaU(e.target.value) }
                                            label="Fecha Ultima Recarga"
                                            type="date"
-                                           className={classes.textField}
+                                          //  className={classes.textField}
                                            InputLabelProps={{
                                              shrink: true,
 
@@ -303,7 +345,7 @@ const useStyles = makeStyles((theme1) => ({
                                            id="date" onChange={ e => setfechaS(e.target.value) }
                                            label="Fecha Siguiente Recarga"
                                            type="date"
-                                           className={classes.textField}
+                                          //  className={classes.textField}
                                            InputLabelProps={{
                                           shrink: true,
                                            }}
@@ -323,6 +365,9 @@ const useStyles = makeStyles((theme1) => ({
         </div>
 
     )
+  }else{
+    return (<Fragment></Fragment>);
+  }
 }
 
 export default FormularioRegistro

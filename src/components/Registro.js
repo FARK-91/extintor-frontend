@@ -55,7 +55,7 @@ fetchData()
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     };
-    const responseUser = await fetch('https://back.prolightpty.com/users');
+    const responseUser = await fetch('https://back.prolightpty.com//users');
     const userData = await responseUser.json();
     if (userData.length != 0){
       userData.forEach((item) => {
@@ -68,6 +68,7 @@ fetchData()
     }
     if (count === 0){
       createUser()
+      localStorage.setItem("usuario", name)
       alert("Su registro ha sido exitoso!")
       window.location.href = "./dashboard"
       // setTimeout(() => {
@@ -83,7 +84,7 @@ const createUser = async () => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: name, login: correo, password: password })
   };
-  const response = await fetch('https://back.prolightpty.com/users',requestOptions);
+  const response = await fetch('https://back.prolightpty.com//users',requestOptions);
   const data = await response.json();
   // this.setState({ postId: data.id });
 }
